@@ -16,6 +16,12 @@
             android:layout_height="wrap_content"
             android:hint="word"
             android:inputType="text" />
+        <EditText
+            android:id="@+id/edit_text_meaning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="meaning"
+            android:inputType="text" />
 
         <CheckBox
             android:id="@+id/check_box_important"

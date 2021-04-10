@@ -1,7 +1,8 @@
-package com.example.letterlab
+package com.example.letterlab.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.letterlab.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
