@@ -12,7 +12,7 @@ data class Word(
     val word: String,
     val meaning: String,
     val important: Boolean = false,
-    val completed: Boolean = false,
+    val learned: Boolean = false,
     val created: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : Parcelable {

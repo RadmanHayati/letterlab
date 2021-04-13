@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.words.WordsFragment"
-    android:background="@color/design_default_color_error"
     >
 
     <androidx.recyclerview.widget.RecyclerView
