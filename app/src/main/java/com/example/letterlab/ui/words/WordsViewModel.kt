@@ -5,15 +5,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.letterlab.data.WordDao
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 
 class WordsViewModel @ViewModelInject constructor(
     private val wordDao: WordDao
 ) : ViewModel() {
     val searchQuery= MutableStateFlow("")
-    private val wordsFlow = searchQuery.flatMapLatest {
-        wordDao.getWords(it)
+    val sortOrder= MutableStateFlow(SortOrder.BY_DATE)
+    val hideLearned= MutableStateFlow(false)
+
+    private val wordsFlow = combine(
+        searchQuery,
+        sortOrder,
+        hideLearned
+    ){ query,sortOrder,hideLearned ->
+        Triple(query,sortOrder,hideLearned)
+    }
+        .flatMapLatest {(query,sortOrder,hideLearned) ->
+        wordDao.getWords(query,sortOrder,hideLearned)
     }
     val words = wordsFlow.asLiveData()
 }
+enum class SortOrder{BY_NAME,BY_DATE}
