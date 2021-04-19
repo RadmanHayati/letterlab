@@ -1,7 +1,6 @@
 package com.example.letterlab.data
 
 import androidx.room.*
-import com.example.letterlab.ui.words.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
