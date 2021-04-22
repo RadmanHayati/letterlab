@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.letterlab.R
 import com.example.letterlab.data.SortOrder
+import com.example.letterlab.data.Word
 import com.example.letterlab.databinding.FragmentWordsBinding
 import com.example.letterlab.util.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +21,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WordsFragment : Fragment(R.layout.fragment_words) {
+class WordsFragment : Fragment(R.layout.fragment_words),WordAdapter.OnItemClickListener {
     private val viewModel: WordsViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentWordsBinding.bind(view)
-        val wordAdapter = WordAdapter()
+        val wordAdapter = WordAdapter(this)
         binding.apply {
             recyclerViewWords.apply {
                 adapter = wordAdapter
@@ -37,6 +38,13 @@ class WordsFragment : Fragment(R.layout.fragment_words) {
             wordAdapter.submitList(it)
         }
         setHasOptionsMenu(true)
+    }
+    override fun onItemClick(word: Word) {
+       viewModel.onWordSelected(word)
+    }
+
+    override fun onCheckBoxClick(word: Word, isChecked: Boolean) {
+       viewModel.onWordCheckedChanged(word,isChecked)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

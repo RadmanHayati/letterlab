@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.letterlab.data.PreferencesManager
 import com.example.letterlab.data.SortOrder
+import com.example.letterlab.data.Word
 import com.example.letterlab.data.WordDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -28,12 +29,18 @@ class WordsViewModel @ViewModelInject constructor(
         .flatMapLatest { (query, filterPreferences) ->
             wordDao.getWords(query, filterPreferences.sortOrder, filterPreferences.hideCompleted)
         }
-
+    val words = wordsFlow.asLiveData()
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
     }
     fun onHideCompletedClick(hideCompleted:Boolean) = viewModelScope.launch {
         preferencesManager.updateHideCompleted(hideCompleted)
     }
-    val words = wordsFlow.asLiveData()
+    fun onWordSelected(word: Word){
+
+    }
+    fun onWordCheckedChanged(word: Word,isChecked:Boolean) = viewModelScope.launch {
+        wordDao.update(word.copy(learned = isChecked))
+    }
+
 }
