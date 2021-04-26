@@ -8,6 +8,21 @@
     <fragment
         android:id="@+id/wordsFragment"
         android:name="com.example.letterlab.ui.words.WordsFragment"
-        android:label="fragment_words"
-        tools:layout="@layout/fragment_words" />
+        android:label="Words"
+        tools:layout="@layout/fragment_words">
+        <action
+            android:id="@+id/action_wordsFragment_to_addEditWordFragment"
+            app:destination="@id/addEditWordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditWordFragment"
+        android:name="com.example.letterlab.ui.addeditword.AddEditWordFragment"
+        android:label="fragment_add_edit_word"
+        tools:layout="@layout/fragment_add_edit_word" >
+        <argument
+            android:name="word"
+            app:argType="com.example.letterlab.data.Word"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

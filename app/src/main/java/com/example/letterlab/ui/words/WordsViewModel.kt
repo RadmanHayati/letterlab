@@ -1,9 +1,8 @@
 package com.example.letterlab.ui.words
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.letterlab.data.PreferencesManager
 import com.example.letterlab.data.SortOrder
 import com.example.letterlab.data.Word
@@ -17,15 +16,16 @@ import kotlinx.coroutines.launch
 
 class WordsViewModel @ViewModelInject constructor(
     private val wordDao: WordDao,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
-    val searchQuery = MutableStateFlow("")
+    val searchQuery = state.getLiveData("searchQuery", "")
     val preferencesFlow = preferencesManager.preferencesFlow
     private val wordEventChannel = Channel<WordsEvent>()
     val wordsEvent = wordEventChannel.receiveAsFlow()
 
     private val wordsFlow = combine(
-        searchQuery,
+        searchQuery.asFlow(),
         preferencesFlow
     ) { query, filterPreferences ->
         Pair(query, filterPreferences)
@@ -42,8 +42,8 @@ class WordsViewModel @ViewModelInject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    fun onWordSelected(word: Word) {
-        // i guess we will use an intent here
+    fun onWordSelected(word: Word) =viewModelScope.launch {
+        wordEventChannel.send(WordsEvent.NavigateToEditWordScreen(word))
     }
 
     fun onWordCheckedChanged(word: Word, isChecked: Boolean) = viewModelScope.launch {
@@ -59,7 +59,13 @@ class WordsViewModel @ViewModelInject constructor(
         wordDao.insert(word)
     }
 
+    fun onAddNewWordClick() = viewModelScope.launch {
+        wordEventChannel.send(WordsEvent.NavigateToAddWordScreen)
+    }
+
     sealed class WordsEvent {
+        object NavigateToAddWordScreen : WordsEvent()
+        data class NavigateToEditWordScreen(val word: Word) : WordsEvent()
         data class ShowUndoDeleteTaskMessage(val word: Word) : WordsEvent()
     }
 
