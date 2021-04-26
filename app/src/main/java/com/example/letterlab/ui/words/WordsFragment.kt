@@ -74,12 +74,12 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                     }
                     is WordsViewModel.WordsEvent.NavigateToAddWordScreen -> {
                         val action =
-                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment()
+                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(null,"New Word")
                         findNavController().navigate(action)
                     }
                     is WordsViewModel.WordsEvent.NavigateToEditWordScreen -> {
                         val action =
-                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(event.word)
+                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(event.word,"Edit Word")
                         findNavController().navigate(action)
                     }
                 }.exhaustive

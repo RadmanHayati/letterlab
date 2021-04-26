@@ -17,12 +17,15 @@
     <fragment
         android:id="@+id/addEditWordFragment"
         android:name="com.example.letterlab.ui.addeditword.AddEditWordFragment"
-        android:label="fragment_add_edit_word"
+        android:label="{title}"
         tools:layout="@layout/fragment_add_edit_word" >
         <argument
             android:name="word"
             app:argType="com.example.letterlab.data.Word"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
 </navigation>
