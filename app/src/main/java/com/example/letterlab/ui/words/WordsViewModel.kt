@@ -7,6 +7,8 @@ import com.example.letterlab.data.PreferencesManager
 import com.example.letterlab.data.SortOrder
 import com.example.letterlab.data.Word
 import com.example.letterlab.data.WordDao
+import com.example.letterlab.ui.ADD_WORD_RESULT_OK
+import com.example.letterlab.ui.EDIT_WORD_RESULT_OK
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -42,7 +44,7 @@ class WordsViewModel @ViewModelInject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    fun onWordSelected(word: Word) =viewModelScope.launch {
+    fun onWordSelected(word: Word) = viewModelScope.launch {
         wordEventChannel.send(WordsEvent.NavigateToEditWordScreen(word))
     }
 
@@ -63,10 +65,22 @@ class WordsViewModel @ViewModelInject constructor(
         wordEventChannel.send(WordsEvent.NavigateToAddWordScreen)
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_WORD_RESULT_OK -> showWordSavedConfirmationMessage("Word Added")
+            EDIT_WORD_RESULT_OK -> showWordSavedConfirmationMessage("Word Updated")
+        }
+    }
+
+    private fun showWordSavedConfirmationMessage(text: String) = viewModelScope.launch {
+        wordEventChannel.send(WordsEvent.showWordSavedConfirmationMessage(text))
+    }
+
     sealed class WordsEvent {
         object NavigateToAddWordScreen : WordsEvent()
         data class NavigateToEditWordScreen(val word: Word) : WordsEvent()
         data class ShowUndoDeleteTaskMessage(val word: Word) : WordsEvent()
+        data class showWordSavedConfirmationMessage(val msg: String) : WordsEvent()
     }
 
 }

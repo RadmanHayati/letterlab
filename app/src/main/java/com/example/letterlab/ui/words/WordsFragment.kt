@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -60,6 +61,11 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                 viewModel.onAddNewWordClick()
             }
         }
+        setFragmentResultListener("add_edit_request"){_,bundle ->
+            val result=bundle.getInt("add_edit_result")
+            viewModel.onAddEditResult(result)
+
+        }
         viewModel.words.observe(viewLifecycleOwner) { it ->
             wordAdapter.submitList(it)
         }
@@ -81,6 +87,9 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                         val action =
                             WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(event.word,"Edit Word")
                         findNavController().navigate(action)
+                    }
+                    is WordsViewModel.WordsEvent.showWordSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                 }.exhaustive
             }
