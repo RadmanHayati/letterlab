@@ -28,11 +28,15 @@ object AppModule {
     @Provides
     fun provideWordDao(db: WordDatabase) = db.wordDao()
 
+    //we inject the coroutine in order to avoid making this each time
     @ApplicationScope
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+    //SupervisorJob when the childes of a coroutine get cancelled or finished
+    //the parent also will be canceled but with a supervisor job they work separately
 }
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class ApplicationScope
+// we made a costume annotation here

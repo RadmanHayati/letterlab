@@ -76,11 +76,16 @@ class WordsViewModel @ViewModelInject constructor(
         wordEventChannel.send(WordsEvent.showWordSavedConfirmationMessage(text))
     }
 
+    fun onDeleteAllLearnedClick() = viewModelScope.launch {
+        wordEventChannel.send(WordsEvent.NavigateToDeleteAllLearnedScreen)
+    }
+
     sealed class WordsEvent {
         object NavigateToAddWordScreen : WordsEvent()
         data class NavigateToEditWordScreen(val word: Word) : WordsEvent()
         data class ShowUndoDeleteTaskMessage(val word: Word) : WordsEvent()
         data class showWordSavedConfirmationMessage(val msg: String) : WordsEvent()
+        object NavigateToDeleteAllLearnedScreen : WordsEvent()
     }
 
 }

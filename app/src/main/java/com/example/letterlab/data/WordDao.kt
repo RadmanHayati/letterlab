@@ -26,4 +26,7 @@ interface WordDao {
     @Delete
     suspend fun delete(word: Word)
 
+    @Query("DELETE FROM word_table WHERE learned = 1")
+    suspend fun deleteLearnedWords()
+
 }

@@ -61,8 +61,8 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                 viewModel.onAddNewWordClick()
             }
         }
-        setFragmentResultListener("add_edit_request"){_,bundle ->
-            val result=bundle.getInt("add_edit_result")
+        setFragmentResultListener("add_edit_request") { _, bundle ->
+            val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
 
         }
@@ -80,16 +80,27 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                     }
                     is WordsViewModel.WordsEvent.NavigateToAddWordScreen -> {
                         val action =
-                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(null,"New Word")
+                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(
+                                null,
+                                "New Word"
+                            )
                         findNavController().navigate(action)
                     }
                     is WordsViewModel.WordsEvent.NavigateToEditWordScreen -> {
                         val action =
-                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(event.word,"Edit Word")
+                            WordsFragmentDirections.actionWordsFragmentToAddEditWordFragment(
+                                event.word,
+                                "Edit Word"
+                            )
                         findNavController().navigate(action)
                     }
                     is WordsViewModel.WordsEvent.showWordSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    is WordsViewModel.WordsEvent.NavigateToDeleteAllLearnedScreen -> {
+                        val action =
+                            WordsFragmentDirections.actionGlobalDeleteAllLearnedDialogFragment()
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }
@@ -135,7 +146,7 @@ class WordsFragment : Fragment(R.layout.fragment_words), WordAdapter.OnItemClick
                 true
             }
             R.id.action_delete_all_completed_words -> {
-
+                viewModel.onDeleteAllLearnedClick()
                 true
             }
             else -> super.onOptionsItemSelected(item)

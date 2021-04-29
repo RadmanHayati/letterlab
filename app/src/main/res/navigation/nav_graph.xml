@@ -28,4 +28,8 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/deleteAllLearnedDialogFragment"
+        android:name="com.example.letterlab.ui.deletealllearned.DeleteAllLearnedDialogFragment"
+        android:label="DeleteAllLearnedDialogFragment" /><action android:id="@+id/action_global_deleteAllLearnedDialogFragment" app:destination="@id/deleteAllLearnedDialogFragment"/>
 </navigation>
